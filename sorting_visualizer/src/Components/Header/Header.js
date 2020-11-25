@@ -5,7 +5,9 @@ import "./Header.css";
 class Header extends Component {
   state = {
     inputSize: 20,
-    isInputValid: true,
+    sortSpeed: 500,
+    isInputSizeValid: true,
+    isSortSpeedValid: true
   };
 
   /**
@@ -20,6 +22,17 @@ class Header extends Component {
   }
 
   /**
+   * Method to set how long each iteration of the loop takes (i.e. The sort speed)
+   * @param {The speed at which the array sorts} sortSpeed 
+   */
+  isValidSortSpeed(sortSpeed) {
+    while (sortSpeed >= 0 && sortSpeed <= 3000) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Dispatches the action to set our input size in the store
    * @param {*} event 
    */
@@ -28,7 +41,7 @@ class Header extends Component {
     if (this.isValidInputSize(inputSize)) {
       this.setState({
         inputSize: inputSize,
-        isInputValid: true,
+        isInputSizeValid: true,
       });
       this.props.dispatch({
         type: "SET_INPUT_SIZE",
@@ -40,10 +53,31 @@ class Header extends Component {
       });
     } else {
       this.setState({
-        isInputValid: false,
+        isInputSizeValid: false,
       });
     }
   };
+
+  /**
+   * Dispatches the action to change the sort speed of our sort
+   * @param {*} event 
+   */
+  setAppSortSpeed = (event) => {
+      let sortSpeed = event.target.value;
+      if(this.isValidSortSpeed(sortSpeed)) {
+          this.setState({
+              isSortSpeedValid: true
+          })
+          this.props.dispatch({
+              type: "SET_SORT_SPEED",
+              payload: sortSpeed
+          })
+      } else {
+        this.setState({
+            isSortSpeedValid: false
+        })
+      }
+  }
 
   /**
    * Method to dispatch the action to set the algorithm we want to run
@@ -108,7 +142,7 @@ class Header extends Component {
                 <a className="dropdown-item">
                   <input
                     className={
-                      this.state.isInputValid === true
+                      this.state.isInputSizeValid === true
                         ? "form-control is-valid"
                         : "form-control is-invalid"
                     }
@@ -164,6 +198,54 @@ class Header extends Component {
                 </a>
               </div>
             </li>
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Speed
+              </a>
+              <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a className="dropdown-item">
+                  <label>Speed of Sort</label>
+                </a>
+                <a className="dropdown-item">
+                  <input
+                    className={
+                      this.state.isSortSpeedValid === true
+                        ? "form-control is-valid"
+                        : "form-control is-invalid"
+                    }
+                    placeholder="speed"
+                    value={this.state.sortSpeed}
+                    onChange={(event) => this.setAppSortSpeed(event)}
+                    disabled={this.props.isAlgorithmRunning}
+                  />
+                </a>
+                <div className="dropdown-divider"></div>
+                <a className="dropdown-item">
+                  <div className="">
+                    <div>
+                      <input
+                        type="range"
+                        value={this.state.sortSpeed}
+                        className="custom-range"
+                        min="0"
+                        max="3000"
+                        step="100"
+                        onChange={(event) => this.setAppSortSpeed(event)}
+                        disabled={this.props.isAlgorithmRunning}
+                      />
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </li>
           </ul>
           <div>
             <button
@@ -183,6 +265,7 @@ class Header extends Component {
 const mapStateToProps = (state) => {
   return {
     inputSize: state.inputSize,
+    sortSpeed: state.sortSpeed,
     algorithm: state.algorithm,
     data: state.data,
     isAlgorithmRunning: state.isAlgorithmRunning

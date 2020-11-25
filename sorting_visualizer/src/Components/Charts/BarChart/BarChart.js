@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 class BarChart extends Component {
   state = {
     inputSize: this.props.inputSize,
+    sortSpeed: this.props.sortSpeed,
     data: this.props.data,
     isAlgorithmRunning: this.props.isAlgorithmRunning,
     barChartDefaultOptions: {
@@ -84,7 +85,7 @@ class BarChart extends Component {
           }),
         });
         // Sleeping for 0.5s
-        await this.sleep(500);
+        await this.sleep(this.props.sortSpeed);
       }
       // Setting the colors of the values that we have already checked
       backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 1] =
@@ -160,6 +161,7 @@ class BarChart extends Component {
 const mapStateToProps = (state) => {
   return {
     inputSize: state.inputSize,
+    sortSpeed: state.sortSpeed,
     algorithm: state.algorithm,
     data: state.data,
     isAlgorithmRunning: state.isAlgorithmRunning,

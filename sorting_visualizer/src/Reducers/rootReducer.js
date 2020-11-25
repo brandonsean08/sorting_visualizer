@@ -1,8 +1,7 @@
-import { sortBubble } from "../Alogrithms/BubbleSort";
-
 //Defining the initial state of our application
 const initState = {
   inputSize: 20,
+  sortSpeed: 500,
   algorithm: "Bubble Sort",
   isAlgorithmRunning: false,
   data: {
@@ -10,7 +9,7 @@ const initState = {
     datasets: [
       {
         data: [],
-        backgroundColor: []
+        backgroundColor: [],
       },
     ],
   },
@@ -28,14 +27,14 @@ function populateDataArray(inputSize) {
   for (let i = 0; i < inputSize; i++) {
     labels[i] = i + 1;
     values[i] = generateRandomNumber();
-    backgroundColor[i] = "#28363D"
+    backgroundColor[i] = "#28363D";
   }
   return {
     labels: labels,
     datasets: [
       {
         data: values,
-        backgroundColor: backgroundColor
+        backgroundColor: backgroundColor,
       },
     ],
   };
@@ -58,16 +57,21 @@ export default function rootReducer(state = initState, action) {
         ...state,
         data: populateDataArray(action.payload),
       };
-      case "SET_SORTED_DATA":
-        return {
-          ...state,
-          data: action.payload,
-        };
-      case "TOGGLE_ALGORITHM_RUNNING":
-        return {
-          ...state,
-          isAlgorithmRunning: action.payload,
-        };
+    case "SET_SORTED_DATA":
+      return {
+        ...state,
+        data: action.payload,
+      };
+    case "TOGGLE_ALGORITHM_RUNNING":
+      return {
+        ...state,
+        isAlgorithmRunning: action.payload,
+      };
+    case "SET_SORT_SPEED":
+      return {
+        ...state,
+        sortSpeed: action.payload,
+      };
     default:
       return state;
   }
