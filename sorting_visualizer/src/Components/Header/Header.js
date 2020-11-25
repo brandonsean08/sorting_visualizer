@@ -1,14 +1,17 @@
 import { React, Component } from "react";
 import { connect } from "react-redux";
 import "./Header.css";
-import {sortBubble} from '../../Alogrithms/BubbleSort';
 
 class Header extends Component {
   state = {
-    inputSize: 50,
+    inputSize: 20,
     isInputValid: true,
   };
 
+  /**
+   * Method to validate whether our array is between 0 and 100
+   * @param {The size of our unsorted array} inputSize 
+   */
   isValidInputSize(inputSize) {
     while (inputSize >= 0 && inputSize <= 100) {
       return true;
@@ -16,6 +19,10 @@ class Header extends Component {
     return false;
   }
 
+  /**
+   * Dispatches the action to set our input size in the store
+   * @param {*} event 
+   */
   setAppInputSize = (event) => {
     let inputSize = event.target.value;
     if (this.isValidInputSize(inputSize)) {
@@ -38,6 +45,10 @@ class Header extends Component {
     }
   };
 
+  /**
+   * Method to dispatch the action to set the algorithm we want to run
+   * @param {The algorithm we want to run} algorithm 
+   */
   setAppAlgorithm = (algorithm) => {
     this.setState({
       algorithm: algorithm,
@@ -48,6 +59,9 @@ class Header extends Component {
     });
   };
 
+  /**
+   * Method to dispatch the action to run the actual algorithm
+   */
   runAlgorithm() {
     this.props.dispatch({
       type: "TOGGLE_ALGORITHM_RUNNING",
@@ -57,8 +71,8 @@ class Header extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <a className="navbar-brand" href="#">
+      <nav className="navbar navbar-expand-lg">
+        <a className="navbar-brand" href={this.props.isAlgorithmRunning ? '' : '#'}>
           Sorting Visualizer
         </a>
         <button
@@ -101,6 +115,7 @@ class Header extends Component {
                     placeholder="size"
                     value={this.state.inputSize}
                     onChange={(event) => this.setAppInputSize(event)}
+                    disabled={this.props.isAlgorithmRunning}
                   />
                 </a>
                 <div className="dropdown-divider"></div>
@@ -115,6 +130,7 @@ class Header extends Component {
                         max="100"
                         step="1"
                         onChange={(event) => this.setAppInputSize(event)}
+                        disabled={this.props.isAlgorithmRunning}
                       />
                     </div>
                   </div>
@@ -151,7 +167,7 @@ class Header extends Component {
           </ul>
           <div>
             <button
-              className="btn btn-warning"
+              className="btn btn-warning run-algorithm-btn"
               onClick={() => this.runAlgorithm()}
               disabled={this.props.isAlgorithmRunning}
             >

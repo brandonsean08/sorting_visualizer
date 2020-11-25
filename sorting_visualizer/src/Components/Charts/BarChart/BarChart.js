@@ -8,11 +8,32 @@ class BarChart extends Component {
     inputSize: this.props.inputSize,
     data: this.props.data,
     isAlgorithmRunning: this.props.isAlgorithmRunning,
+    barChartDefaultOptions: {
+      legend: {
+        display: false,
+      },
+      scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
+      },
+    },
   };
 
   /**
    * Method to sleep for a given time
-   * @param {The time we want to sleep for} ms 
+   * @param {The time we want to sleep for} ms
    */
   sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -20,7 +41,7 @@ class BarChart extends Component {
 
   /**
    * method to perform the actual bubble sort
-   * @param {The original array that we want to sort (i.e. The unsorted array)} originalData 
+   * @param {The original array that we want to sort (i.e. The unsorted array)} originalData
    */
   async runBubbleSort(originalData) {
     // Extracting the variables that we need to work with
@@ -36,20 +57,20 @@ class BarChart extends Component {
     // Starting the actual Bubble Sort
     for (i = 0; i < len - 1; i++) {
       for (j = 0; j < len - 1 - i; j++) {
-          // Changing the colors
-          backgroundColorsArrayCopy[j + 1] = 'yellow';
-          backgroundColorsArrayCopy[j + 2] = 'red'
+        // Changing the colors
+        backgroundColorsArrayCopy[j + 1] = "#F6D55C";
+        backgroundColorsArrayCopy[j + 2] = "#ED553B";
         if (dataArrayCopy[j] > dataArrayCopy[j + 1]) {
           // Doing the swap
           let tmp = dataArrayCopy[j];
           dataArrayCopy[j] = dataArrayCopy[j + 1];
           dataArrayCopy[j + 1] = tmp;
           // Changing the colors back after the swap
-          backgroundColorsArrayCopy[j - 1] = "grey";
-          backgroundColorsArrayCopy[j] = 'grey'
+          backgroundColorsArrayCopy[j - 1] = "#28363D";
+          backgroundColorsArrayCopy[j] = "#28363D";
         } else {
           // Changing the colors if they do not swap
-          backgroundColorsArrayCopy[j] = "grey";
+          backgroundColorsArrayCopy[j] = "#28363D";
         }
         //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
         originalData.datasets[0].data = dataArrayCopy;
@@ -67,20 +88,20 @@ class BarChart extends Component {
       }
       // Setting the colors of the values that we have already checked
       backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 1] =
-      "green";
+        "#3CAEA3";
       backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 2] =
-      "green";
+        "#3CAEA3";
     }
     //Setting the first index to checked once we have completed the entire sort
-    backgroundColorsArrayCopy[0] = 'green';
+    backgroundColorsArrayCopy[0] = "#3CAEA3";
     this.setState({
-        data: {},
-      });
-      this.setState({
-        data: Object.assign({}, originalData.data, {
-          datasets: datasetsCopy,
-        }),
-      });
+      data: {},
+    });
+    this.setState({
+      data: Object.assign({}, originalData.data, {
+        datasets: datasetsCopy,
+      }),
+    });
     // Indicate that we have completed the sort
     this.props.dispatch({
       type: "TOGGLE_ALGORITHM_RUNNING",
@@ -90,7 +111,7 @@ class BarChart extends Component {
 
   /**
    * Listening for a redux store change in the props
-   * @param {The props that our component has recieved when the redux store changes} nextProps 
+   * @param {The props that our component has recieved when the redux store changes} nextProps
    */
   componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data) {
@@ -127,7 +148,10 @@ class BarChart extends Component {
     return (
       <div className="bar-chart-canvas">
         <h3 className="text-center">Visualizing: {this.props.algorithm}</h3>
-        <Bar data={this.state.data} />
+        <Bar
+          data={this.state.data}
+          options={this.state.barChartDefaultOptions}
+        />
       </div>
     );
   }

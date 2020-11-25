@@ -5,3 +5,21 @@
 .dropdown-item-label:hover {
     cursor:  pointer !important;
 }
+
+.run-algorithm-btn {
+    width: 20vw;
+    background-color: #F6D55C;
+}
+
+.navbar {
+    background-color: #173F5F;
+}
+
+.navbar > a, li > a {
+    color: white
+}
+
+.navbar > a:hover, li > a:hover {
+    color: white;
+    font-weight: bolder;
+}

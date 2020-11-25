@@ -2,14 +2,13 @@ import { sortBubble } from "../Alogrithms/BubbleSort";
 
 //Defining the initial state of our application
 const initState = {
-  inputSize: 50,
+  inputSize: 20,
   algorithm: "Bubble Sort",
   isAlgorithmRunning: false,
   data: {
     labels: [],
     datasets: [
       {
-        label: "Sort",
         data: [],
         backgroundColor: []
       },
@@ -29,13 +28,12 @@ function populateDataArray(inputSize) {
   for (let i = 0; i < inputSize; i++) {
     labels[i] = i + 1;
     values[i] = generateRandomNumber();
-    backgroundColor[i] = "grey"
+    backgroundColor[i] = "#28363D"
   }
   return {
     labels: labels,
     datasets: [
       {
-        label: "Sort",
         data: values,
         backgroundColor: backgroundColor
       },
