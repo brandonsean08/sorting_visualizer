@@ -15,10 +15,17 @@ const initState = {
   },
 };
 
+/**
+ * Method to generate a random number between 0 - 100
+ */
 function generateRandomNumber() {
   return Math.floor(Math.random() * 100) + 1;
 }
 
+/**
+ * Method to populate the default array at a given size with random values between 0 - 100
+ * @param {The size of the array to generate} inputSize
+ */
 function populateDataArray(inputSize) {
   let labels = new Array(inputSize);
   let values = new Array(inputSize);

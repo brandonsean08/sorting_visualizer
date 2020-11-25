@@ -7,12 +7,12 @@ class Header extends Component {
     inputSize: 20,
     sortSpeed: 500,
     isInputSizeValid: true,
-    isSortSpeedValid: true
+    isSortSpeedValid: true,
   };
 
   /**
    * Method to validate whether our array is between 0 and 100
-   * @param {The size of our unsorted array} inputSize 
+   * @param {The size of our unsorted array} inputSize
    */
   isValidInputSize(inputSize) {
     while (inputSize >= 0 && inputSize <= 100) {
@@ -23,7 +23,7 @@ class Header extends Component {
 
   /**
    * Method to set how long each iteration of the loop takes (i.e. The sort speed)
-   * @param {The speed at which the array sorts} sortSpeed 
+   * @param {The speed at which the array sorts} sortSpeed
    */
   isValidSortSpeed(sortSpeed) {
     while (sortSpeed >= 0 && sortSpeed <= 3000) {
@@ -34,7 +34,7 @@ class Header extends Component {
 
   /**
    * Dispatches the action to set our input size in the store
-   * @param {*} event 
+   * @param {*} event
    */
   setAppInputSize = (event) => {
     let inputSize = event.target.value;
@@ -60,28 +60,28 @@ class Header extends Component {
 
   /**
    * Dispatches the action to change the sort speed of our sort
-   * @param {*} event 
+   * @param {*} event
    */
   setAppSortSpeed = (event) => {
-      let sortSpeed = event.target.value;
-      if(this.isValidSortSpeed(sortSpeed)) {
-          this.setState({
-              isSortSpeedValid: true
-          })
-          this.props.dispatch({
-              type: "SET_SORT_SPEED",
-              payload: sortSpeed
-          })
-      } else {
-        this.setState({
-            isSortSpeedValid: false
-        })
-      }
-  }
+    let sortSpeed = event.target.value;
+    if (this.isValidSortSpeed(sortSpeed)) {
+      this.setState({
+        isSortSpeedValid: true,
+      });
+      this.props.dispatch({
+        type: "SET_SORT_SPEED",
+        payload: sortSpeed,
+      });
+    } else {
+      this.setState({
+        isSortSpeedValid: false,
+      });
+    }
+  };
 
   /**
    * Method to dispatch the action to set the algorithm we want to run
-   * @param {The algorithm we want to run} algorithm 
+   * @param {The algorithm we want to run} algorithm
    */
   setAppAlgorithm = (algorithm) => {
     this.setState({
@@ -106,7 +106,10 @@ class Header extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg">
-        <a className="navbar-brand" href={this.props.isAlgorithmRunning ? '' : '#'}>
+        <a
+          className="navbar-brand"
+          href={this.props.isAlgorithmRunning ? "" : "#"}
+        >
           Sorting Visualizer
         </a>
         <button
@@ -268,7 +271,7 @@ const mapStateToProps = (state) => {
     sortSpeed: state.sortSpeed,
     algorithm: state.algorithm,
     data: state.data,
-    isAlgorithmRunning: state.isAlgorithmRunning
+    isAlgorithmRunning: state.isAlgorithmRunning,
   };
 };
 
