@@ -9,6 +9,12 @@
 .run-algorithm-btn {
     width: 20vw;
     background-color: #F6D55C;
+    margin-right: 1vw;
+}
+
+.reset-data-btn {
+    width: 10vw;
+    background-color: #ED553B;
 }
 
 .navbar {
@@ -19,7 +25,23 @@
     color: white
 }
 
+.navbar > button > span {
+    color: white
+}
+
 .navbar > a:hover, li > a:hover {
     color: white;
     font-weight: bolder;
+}
+
+.navbar-toggler {
+    color: white;
+}
+
+.navbar-toggler:hover {
+    color: white;
+}
+
+.header-btn-group {
+    display: inline-block;
 }

@@ -1,6 +1,7 @@
 import { React, Component } from "react";
 import { connect } from "react-redux";
 import "./Header.css";
+import { algorithms } from "../../constants";
 
 class Header extends Component {
   state = {
@@ -99,13 +100,23 @@ class Header extends Component {
   runAlgorithm() {
     this.props.dispatch({
       type: "TOGGLE_ALGORITHM_RUNNING",
-      payload: true,
+      payload: this.props.inputSize,
+    });
+  }
+
+  /**
+   * Method to reset the data (ideally called after an algorithm has been run)
+   */
+  resetData() {
+    this.props.dispatch({
+      type: "RESET_DATA",
+      payload: this.props.inputSize,
     });
   }
 
   render() {
     return (
-      <nav className="navbar navbar-expand-lg">
+      <nav className="navbar navbar-expand-lg navbar-dark">
         <a
           className="navbar-brand"
           href={this.props.isAlgorithmRunning ? "" : "#"}
@@ -189,13 +200,15 @@ class Header extends Component {
               <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a
                   className="dropdown-item"
-                  onClick={() => this.setAppAlgorithm("Bubble Sort")}
+                  onClick={() => this.setAppAlgorithm(algorithms.BUBBLE_SORT)}
                 >
                   <label className="dropdown-item-label">Bubble Sort</label>
                 </a>
                 <a
                   className="dropdown-item"
-                  onClick={() => this.setAppAlgorithm("Selection Sort")}
+                  onClick={() =>
+                    this.setAppAlgorithm(algorithms.SELECTION_SORT)
+                  }
                 >
                   <label className="dropdown-item-label">Selection Sort</label>
                 </a>
@@ -250,14 +263,21 @@ class Header extends Component {
               </div>
             </li>
           </ul>
-          <div>
-            <button
-              className="btn btn-warning run-algorithm-btn"
-              onClick={() => this.runAlgorithm()}
-              disabled={this.props.isAlgorithmRunning}
-            >
-              Run
-            </button>
+          <div className="header-btn-group">
+              <button
+                className="btn btn-warning run-algorithm-btn"
+                onClick={() => this.runAlgorithm()}
+                disabled={this.props.isAlgorithmRunning}
+              >
+                Run
+              </button>
+              <button
+                className="btn btn-danger reset-data-btn"
+                onClick={() => this.resetData()}
+                disabled={this.props.isAlgorithmRunning}
+              >
+                Reset
+              </button>
           </div>
         </div>
       </nav>
