@@ -202,7 +202,7 @@ class Header extends Component {
                   className="dropdown-item"
                   onClick={() => this.setAppAlgorithm(algorithms.BUBBLE_SORT)}
                 >
-                  <label className="dropdown-item-label">Bubble Sort</label>
+                  <label className="dropdown-item-label">{algorithms.BUBBLE_SORT}</label>
                 </a>
                 <a
                   className="dropdown-item"
@@ -210,7 +210,15 @@ class Header extends Component {
                     this.setAppAlgorithm(algorithms.SELECTION_SORT)
                   }
                 >
-                  <label className="dropdown-item-label">Selection Sort</label>
+                  <label className="dropdown-item-label">{algorithms.SELECTION_SORT}</label>
+                </a>
+                <a
+                  className="dropdown-item"
+                  onClick={() =>
+                    this.setAppAlgorithm(algorithms.INSERTION_SORT)
+                  }
+                >
+                  <label className="dropdown-item-label">{algorithms.INSERTION_SORT}</label>
                 </a>
               </div>
             </li>

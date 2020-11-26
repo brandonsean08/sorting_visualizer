@@ -10,4 +10,5 @@ export const barColors = {
 export const algorithms = {
   BUBBLE_SORT: "Bubble Sort",
   SELECTION_SORT: "Selection Sort",
+  INSERTION_SORT: "Insertion Sort"
 };

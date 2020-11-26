@@ -48,7 +48,6 @@ function populateDataArray(inputSize) {
 }
 
 export default function rootReducer(state = initState, action) {
-    console.log(action)
   switch (action.type) {
     case "SET_INPUT_SIZE":
       return {

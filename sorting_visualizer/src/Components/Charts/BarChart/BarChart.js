@@ -122,7 +122,7 @@ class BarChart extends Component {
    */
   async runSelectionSort(originalData) {
     if (this.props.algorithm === algorithms.SELECTION_SORT) {
-      
+
       // Extracting the variables that we need to work with
       let len = originalData.datasets[0].data.length;
       let datasetsCopy = originalData.datasets.slice(0);
@@ -195,6 +195,85 @@ class BarChart extends Component {
     }
   }
 
+    /**
+   * method to perform the actual insertion sort
+   * @param {The original array that we want to sort (i.e. The unsorted array)} originalData
+   */
+  async runInsertionSort(originalData) {
+    if (this.props.algorithm === algorithms.INSERTION_SORT) {
+
+      // Extracting the variables that we need to work with
+      let len = originalData.datasets[0].data.length;
+      let datasetsCopy = originalData.datasets.slice(0);
+      let dataArrayCopy = datasetsCopy[0].data;
+      let backgroundColorsArrayCopy = datasetsCopy[0].backgroundColor;
+
+      // Declaring the two indeces needed for our array
+      let i;
+      let j;
+      let current;
+
+      for (i = 1; i < len; i++) {
+        backgroundColorsArrayCopy[i] = barColors.YELLOW
+        // Choosing the first element in our unsorted subarray
+        current = dataArrayCopy[i];
+        // The last element of our sorted subarray
+        j = i-1; 
+        //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+        originalData.datasets[0].data = dataArrayCopy;
+        originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+        this.setStateForBarchart(originalData, datasetsCopy);
+
+        await this.sleep(this.props.sortSpeed)
+
+        while ((j > - 1) && (current < dataArrayCopy[j])) {
+          backgroundColorsArrayCopy[j] = barColors.RED;
+          dataArrayCopy[j + 1] = dataArrayCopy[j];
+          backgroundColorsArrayCopy[j + 1] = barColors.GREEN;
+
+          //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+          originalData.datasets[0].data = dataArrayCopy;
+          originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+          this.setStateForBarchart(originalData, datasetsCopy);
+
+          await this.sleep(this.props.sortSpeed)
+
+          if(j === (i - 1)) {
+            backgroundColorsArrayCopy[j + 1] = barColors.YELLOW;
+          } else {
+            backgroundColorsArrayCopy[j + 1] = barColors.NEUTRAL;
+          }
+
+            j--;
+        }
+
+        dataArrayCopy[j+1] = current;
+
+        for(let t = 0; t < i; t++) {
+          backgroundColorsArrayCopy[t] = barColors.GREEN;
+        }
+
+        //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+        originalData.datasets[0].data = dataArrayCopy;
+        originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+        this.setStateForBarchart(originalData, datasetsCopy);
+    }
+
+    backgroundColorsArrayCopy[i - 1] = barColors.GREEN;
+    
+    //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+    originalData.datasets[0].data = dataArrayCopy;
+    originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+    this.setStateForBarchart(originalData, datasetsCopy);
+
+      // Indicate that we have completed the sort
+      this.props.dispatch({
+        type: "TOGGLE_ALGORITHM_RUNNING",
+        payload: false,
+      });
+    }
+  }
+
   /**
    * Listening for a redux store change in the props
    * @param {The props that our component has recieved when the redux store changes} nextProps
@@ -215,6 +294,8 @@ class BarChart extends Component {
             this.runBubbleSort(this.props.data);
           case algorithms.SELECTION_SORT:
             this.runSelectionSort(this.props.data);
+          case algorithms.INSERTION_SORT:
+            this.runInsertionSort(this.props.data);
           default:
             break;
         }
