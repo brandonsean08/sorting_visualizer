@@ -100,7 +100,7 @@ class Header extends Component {
   runAlgorithm() {
     this.props.dispatch({
       type: "TOGGLE_ALGORITHM_RUNNING",
-      payload: this.props.inputSize,
+      payload: true,
     });
   }
 

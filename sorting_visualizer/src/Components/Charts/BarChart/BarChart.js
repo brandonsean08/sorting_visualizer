@@ -63,55 +63,57 @@ class BarChart extends Component {
    * @param {The original array that we want to sort (i.e. The unsorted array)} originalData
    */
   async runBubbleSort(originalData) {
-    // Extracting the variables that we need to work with
-    let len = originalData.datasets[0].data.length;
-    let datasetsCopy = originalData.datasets.slice(0);
-    let dataArrayCopy = datasetsCopy[0].data;
-    let backgroundColorsArrayCopy = datasetsCopy[0].backgroundColor;
+    if (this.props.algorithm === algorithms.BUBBLE_SORT) {
+      // Extracting the variables that we need to work with
+      let len = originalData.datasets[0].data.length;
+      let datasetsCopy = originalData.datasets.slice(0);
+      let dataArrayCopy = datasetsCopy[0].data;
+      let backgroundColorsArrayCopy = datasetsCopy[0].backgroundColor;
 
-    // Declaring the two indeces needed for our array
-    let i = 0;
-    let j = 0;
+      // Declaring the two indeces needed for our array
+      let i = 0;
+      let j = 0;
 
-    // Starting the actual Bubble Sort
-    for (i = 0; i < len - 1; i++) {
-      for (j = 0; j < len - 1 - i; j++) {
-        // Changing the colors
-        backgroundColorsArrayCopy[j + 1] = barColors.YELLOW;
-        backgroundColorsArrayCopy[j + 2] = barColors.RED;
-        if (dataArrayCopy[j] > dataArrayCopy[j + 1]) {
-          // Doing the swap
-          let tmp = dataArrayCopy[j];
-          dataArrayCopy[j] = dataArrayCopy[j + 1];
-          dataArrayCopy[j + 1] = tmp;
-          // Changing the colors back after the swap
-          backgroundColorsArrayCopy[j - 1] = barColors.NEUTRAL;
-          backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
-        } else {
-          // Changing the colors if they do not swap
-          backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
+      // Starting the actual Bubble Sort
+      for (i = 0; i < len - 1; i++) {
+        for (j = 0; j < len - 1 - i; j++) {
+          // Changing the colors
+          backgroundColorsArrayCopy[j + 1] = barColors.YELLOW;
+          backgroundColorsArrayCopy[j + 2] = barColors.RED;
+          if (dataArrayCopy[j] > dataArrayCopy[j + 1]) {
+            // Doing the swap
+            let tmp = dataArrayCopy[j];
+            dataArrayCopy[j] = dataArrayCopy[j + 1];
+            dataArrayCopy[j + 1] = tmp;
+            // Changing the colors back after the swap
+            backgroundColorsArrayCopy[j - 1] = barColors.NEUTRAL;
+            backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
+          } else {
+            // Changing the colors if they do not swap
+            backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
+          }
+          //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+          originalData.datasets[0].data = dataArrayCopy;
+          originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+          this.setStateForBarchart(originalData, datasetsCopy);
+          // Sleeping for 0.5s
+          await this.sleep(this.props.sortSpeed);
         }
-        //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
-        originalData.datasets[0].data = dataArrayCopy;
-        originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
-        this.setStateForBarchart(originalData, datasetsCopy);
-        // Sleeping for 0.5s
-        await this.sleep(this.props.sortSpeed);
+        // Setting the colors of the values that we have already checked
+        backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 1] =
+          barColors.GREEN;
+        backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 2] =
+          barColors.GREEN;
       }
-      // Setting the colors of the values that we have already checked
-      backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 1] =
-        barColors.GREEN;
-      backgroundColorsArrayCopy[backgroundColorsArrayCopy.length - i - 2] =
-        barColors.GREEN;
+      //Setting the first index to checked once we have completed the entire sort
+      backgroundColorsArrayCopy[0] = barColors.GREEN;
+      this.setStateForBarchart(originalData, datasetsCopy);
+      // Indicate that we have completed the sort
+      this.props.dispatch({
+        type: "TOGGLE_ALGORITHM_RUNNING",
+        payload: false,
+      });
     }
-    //Setting the first index to checked once we have completed the entire sort
-    backgroundColorsArrayCopy[0] = barColors.GREEN;
-    this.setStateForBarchart(originalData, datasetsCopy);
-    // Indicate that we have completed the sort
-    this.props.dispatch({
-      type: "TOGGLE_ALGORITHM_RUNNING",
-      payload: false,
-    });
   }
 
   /**
@@ -119,75 +121,78 @@ class BarChart extends Component {
    * @param {The original array that we want to sort (i.e. The unsorted array)} originalData
    */
   async runSelectionSort(originalData) {
-    // Extracting the variables that we need to work with
-    let len = originalData.datasets[0].data.length;
-    let datasetsCopy = originalData.datasets.slice(0);
-    let dataArrayCopy = datasetsCopy[0].data;
-    let backgroundColorsArrayCopy = datasetsCopy[0].backgroundColor;
+    if (this.props.algorithm === algorithms.SELECTION_SORT) {
+      
+      // Extracting the variables that we need to work with
+      let len = originalData.datasets[0].data.length;
+      let datasetsCopy = originalData.datasets.slice(0);
+      let dataArrayCopy = datasetsCopy[0].data;
+      let backgroundColorsArrayCopy = datasetsCopy[0].backgroundColor;
 
-    // Declaring the two indeces needed for our array
-    let i;
-    let j;
-    let min_index;
+      // Declaring the two indeces needed for our array
+      let i;
+      let j;
+      let min_index;
 
-    // Starting the actual Selection Sort
-    for (i = 0; i < len - 1; i++) {
-      min_index = i;
-      backgroundColorsArrayCopy[min_index] = barColors.RED;
-      for (j = i + 1; j < len; j++) {
-        // Changing the colors
-        backgroundColorsArrayCopy[j] = barColors.YELLOW;
-        //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
-        originalData.datasets[0].data = dataArrayCopy;
-        originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
-        this.setStateForBarchart(originalData, datasetsCopy);
-        await this.sleep(this.props.sortSpeed);
+      // Starting the actual Selection Sort
+      for (i = 0; i < len - 1; i++) {
+        min_index = i;
+        backgroundColorsArrayCopy[min_index] = barColors.RED;
+        for (j = i + 1; j < len; j++) {
+          // Changing the colors
+          backgroundColorsArrayCopy[j] = barColors.YELLOW;
+          //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+          originalData.datasets[0].data = dataArrayCopy;
+          originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+          this.setStateForBarchart(originalData, datasetsCopy);
+          await this.sleep(this.props.sortSpeed);
 
-        if (dataArrayCopy[j] < dataArrayCopy[min_index]) {
-          if (min_index !== i) {
-            backgroundColorsArrayCopy[min_index] = barColors.NEUTRAL;
+          if (dataArrayCopy[j] < dataArrayCopy[min_index]) {
+            if (min_index !== i) {
+              backgroundColorsArrayCopy[min_index] = barColors.NEUTRAL;
+            }
+            min_index = j;
+            backgroundColorsArrayCopy[min_index] = barColors.RED;
+            backgroundColorsArrayCopy[i] = barColors.NEUTRAL;
+          } else {
+            backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
           }
-          min_index = j;
-          backgroundColorsArrayCopy[min_index] = barColors.RED;
-          backgroundColorsArrayCopy[i] = barColors.NEUTRAL;
-        } else {
-          backgroundColorsArrayCopy[j] = barColors.NEUTRAL;
+          //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
+          originalData.datasets[0].data = dataArrayCopy;
+          originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+          this.setStateForBarchart(originalData, datasetsCopy);
         }
+
+        if (min_index !== i) {
+          let temp = dataArrayCopy[i];
+          dataArrayCopy[i] = dataArrayCopy[min_index];
+          dataArrayCopy[min_index] = temp;
+
+          backgroundColorsArrayCopy[min_index] = barColors.NEUTRAL;
+          backgroundColorsArrayCopy[i] = barColors.NEUTRAL;
+          originalData.datasets[0].data = dataArrayCopy;
+          originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
+          this.setStateForBarchart(originalData, datasetsCopy);
+        }
+        // Setting the colors of the values that we have already checked
+        backgroundColorsArrayCopy[i] = barColors.GREEN;
         //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
         originalData.datasets[0].data = dataArrayCopy;
         originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
         this.setStateForBarchart(originalData, datasetsCopy);
       }
-
-      if (min_index !== i) {
-        let temp = dataArrayCopy[i];
-        dataArrayCopy[i] = dataArrayCopy[min_index];
-        dataArrayCopy[min_index] = temp;
-
-        backgroundColorsArrayCopy[min_index] = barColors.NEUTRAL;
-        backgroundColorsArrayCopy[i] = barColors.NEUTRAL;
-        originalData.datasets[0].data = dataArrayCopy;
-        originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
-        this.setStateForBarchart(originalData, datasetsCopy);
-      }
-      // Setting the colors of the values that we have already checked
+      //Setting the first index to checked once we have completed the entire sort
       backgroundColorsArrayCopy[i] = barColors.GREEN;
       //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
       originalData.datasets[0].data = dataArrayCopy;
       originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
       this.setStateForBarchart(originalData, datasetsCopy);
+      // Indicate that we have completed the sort
+      this.props.dispatch({
+        type: "TOGGLE_ALGORITHM_RUNNING",
+        payload: false,
+      });
     }
-    //Setting the first index to checked once we have completed the entire sort
-    backgroundColorsArrayCopy[i] = barColors.GREEN;
-    //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
-    originalData.datasets[0].data = dataArrayCopy;
-    originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
-    this.setStateForBarchart(originalData, datasetsCopy);
-    // Indicate that we have completed the sort
-    this.props.dispatch({
-      type: "TOGGLE_ALGORITHM_RUNNING",
-      payload: false,
-    });
   }
 
   /**
