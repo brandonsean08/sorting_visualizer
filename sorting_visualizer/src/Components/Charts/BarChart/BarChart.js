@@ -14,6 +14,9 @@ class BarChart extends Component {
       legend: {
         display: false,
       },
+      tooltips: {
+        enabled: false
+      },
       scales: {
         xAxes: [
           {
@@ -260,7 +263,7 @@ class BarChart extends Component {
     }
 
     backgroundColorsArrayCopy[i - 1] = barColors.GREEN;
-    
+
     //Setting the copied arrays of values and colors back to the original array so that setState recognises the deep change
     originalData.datasets[0].data = dataArrayCopy;
     originalData.datasets[0].backgroundColor = backgroundColorsArrayCopy;
