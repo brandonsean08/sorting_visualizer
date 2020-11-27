@@ -17,6 +17,10 @@ class BarChart extends Component {
       tooltips: {
         enabled: false
       },
+      animations: {
+        duration: 500
+      },
+      maintainAspectRatio: false,
       scales: {
         xAxes: [
           {
@@ -319,7 +323,6 @@ class BarChart extends Component {
   render() {
     return (
       <div className="bar-chart-canvas">
-        <h3 className="text-center">Visualizing: {this.props.algorithm}</h3>
         <Bar
           data={this.state.data}
           options={this.state.barChartDefaultOptions}

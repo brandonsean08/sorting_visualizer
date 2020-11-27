@@ -1,0 +1,8 @@
+.react-stopwatch-timer__table {
+    height: 25vh;
+    width: 10vw;
+}
+
+.timer {
+    display: inline-flex
+}
